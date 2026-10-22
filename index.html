@@ -144,8 +144,14 @@
 .ks .ks-profi-zeile { margin-top: 4px; border-top: .5px solid var(--ks-trenner); padding-top: 8px; }
 .ks .ks-titel { font-size: var(--ks-fs-body); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ks .ks-undo { display: flex; gap: 4px; }
+/* Text-Werkzeug (Plan 3.10): drei kurze Knöpfe je Reihe; schmal ohne Symbol, damit die Wörter passen */
+.ks .ks-text-werkzeuge { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.ks .ks-text-werkzeuge .ks-knopf { min-width: 0; padding: 0 8px; }
+@container ks (max-width: 420px) { .ks .ks-text-werkzeuge .ks-ic { display: none; } }
+.ks.ks-quer .ks-text-werkzeuge .ks-ic { display: none; }   /* quer ist die Spalte schmal */
 /* Kurzbeschriftung „Foto zurück/vor“ nur, wo Platz ist: Schritt für Schritt ab 380 px (nicht bei großer Bedienung), sonst ab 600 px */
 .ks .ks-undo-text { display: none; font-size: var(--ks-fs-fuss); }
+.ks .ks-undo-titel { display: none; align-self: center; font-size: var(--ks-fs-fuss); font-weight: 600; color: var(--ks-text2); padding: 0; }
 @container ks (min-width: 600px) { .ks .ks-undo .ks-undo-text { display: inline; } .ks .ks-undo .ks-knopf.ks-rund { width: auto; padding: 0 10px; } }
 /* Kurzbeschriftung „Foto zurück/vor“ erst ab 380 px: darunter bricht „Schritt x von 6 · Name“ auf 2–3 Zeilen um (gemessen bei 340/358) */
 @container ks (min-width: 380px) { .ks:not(.ks-gross)[data-ks-variante="assistent"] .ks-undo .ks-undo-text { display: inline; } .ks:not(.ks-gross)[data-ks-variante="assistent"] .ks-undo .ks-knopf.ks-rund { width: auto; padding: 0 10px; } }
@@ -345,6 +351,13 @@
 .ks .ks-blatt-kopf h2 { font-size: var(--ks-fs-titel); font-weight: 700; }
 .ks .ks-blatt-inhalt:has(> .ks-reihe-ende:last-child) { padding-bottom: 0; }
 .ks .ks-blatt-inhalt > .ks-reihe-ende:last-child { position: sticky; bottom: 0; margin: 0 calc(var(--ks-rand) * -1); padding: 8px var(--ks-rand) 16px; background: var(--ks-bg2); border-top: .5px solid var(--ks-trenner); }
+/* Fester Fuß im Blatt (Teilen-Optionen): Knöpfe bleiben beim Rollen unten in der Daumenzone */
+.ks .ks-blatt-fuss { flex: none; display: flex; flex-direction: column; gap: 8px; padding: 8px var(--ks-rand) 16px; background: var(--ks-bg2); border-top: .5px solid var(--ks-trenner); }
+.ks .ks-blatt-fuss .ks-senden-knoepfe .ks-knopf { flex: 1 1 0; min-width: fit-content; padding: 0 10px; }   /* eine Reihe, wo sie passt; sonst bricht sie um */
+@container ks (max-width: 440px) { .ks .ks-blatt-fuss .ks-senden-knoepfe .ks-ic { display: none; } }   /* schmal: drei Wörter ohne Symbol, damit sie nebeneinander passen */
+.ks:not(.ks-quer) .ks-blatt-inhalt .ks-nur-quer, .ks.ks-quer .ks-blatt-fuss .ks-datei-info { display: none; }   /* quer: Dateiname zu den Optionen */
+.ks.ks-quer .ks-blatt-fuss { padding: 6px var(--ks-rand) 8px; }
+.ks.ks-quer .ks-blatt-fuss .ks-senden-knoepfe .ks-knopf { min-height: var(--ks-tap); }   /* quer flach: eine Reihe in normaler Tipphöhe (bei großer Bedienung 55 statt 62 px) */
 .ks .ks-blatt-inhalt { overflow-y: auto; overflow-x: hidden; padding: 4px var(--ks-rand) 16px; display: flex; flex-direction: column; gap: 14px; overscroll-behavior: contain; }
 .ks.ks-quer .ks-blatt, .ks.ks-breit .ks-blatt {
   left: auto; top: 8px; bottom: 8px; right: 8px; width: min(420px, calc(100% - 16px)); max-height: none;
@@ -833,15 +846,16 @@ h1, h2, h3, h4, p { margin: 0; }
 @media (prefers-reduced-transparency: reduce) { .topbar, .kopf { background: var(--karte); -webkit-backdrop-filter: none; backdrop-filter: none; } }
 .kopf-innen { max-width: 1480px; margin: 0 auto; padding: 8px max(16px, env(safe-area-inset-right)) 12px max(16px, env(safe-area-inset-left)); }
 .untertitel { font-size: 13px; color: var(--text-2); margin-bottom: 8px; }
-/* Rückfrage zum Zurücksetzen: fest unter der Kopfleiste, damit sie auch weiter unten in Sicht ist (nicht im .kopf: dessen backdrop-filter würde fixed einfangen) */
-#rfKopf { position: fixed; top: calc(var(--topbar-h) + 8px); left: 50%; transform: translateX(-50%); width: min(calc(100% - 24px), 560px); z-index: 41; margin: 0;   /* über Mini (39) und Toast (40) */
-  background: var(--karte) linear-gradient(var(--rot-flaeche), var(--rot-flaeche)); border: 1px solid var(--rot); box-shadow: 0 8px 24px rgba(0,0,0,.22); }
+/* Rückfrage zum Zurücksetzen: im Blatt „Mehr“ direkt unter der Zeile (Plan 3.2) */
+#rfKopf { margin: 4px 10px 8px; }
 .toast {
   position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 40;
   max-width: min(92vw, 520px); padding: 10px 16px; border-radius: 12px; font-size: 14px; text-align: center;
   background: var(--text); color: var(--bg); box-shadow: var(--schatten);
 }
 .toast:empty { display: none; }
+.toast:has(.toast-knopf) { display: flex; align-items: center; gap: 12px; padding: 4px 6px 4px 16px; }
+.toast-knopf { min-height: 44px; padding: 0 12px; border: 1px solid currentColor; border-radius: 10px; background: none; color: inherit; font: 600 14px var(--font); }
 
 /* Knöpfe */
 .knopf {
@@ -930,6 +944,10 @@ h1, h2, h3, h4, p { margin: 0; }
 .einleitung { margin: 0; padding: 0 4px; font-size: 15px; line-height: 1.4; color: var(--text-2); max-width: 68ch; }
 .zaehler { font-size: 15px; font-weight: 600; margin: 0; padding: 0 4px; color: var(--text-2); font-variant-numeric: tabular-nums; }
 #inhalt, #buehne, #studioMount, #panel, .buehne-spalte { scroll-margin-top: calc(var(--topbar-h) + 8px); }
+/* Plan 3.8: Im Konfigurator stehen zwei Rückgängig-Paare übereinander; das des Studios trägt sichtbar „Foto“ (wo „Foto zurück/vor“ schon dasteht, nicht doppelt) */
+#studioMount .ks .ks-undo-titel { display: inline; }
+@container ks (min-width: 600px) { #studioMount .ks .ks-undo .ks-undo-titel { display: none; } }
+@container ks (min-width: 380px) { #studioMount .ks:not(.ks-gross)[data-ks-variante="assistent"] .ks-undo .ks-undo-titel { display: none; } }
 /* Tab-Taste (auch rückwärts): Fokus holt Elemente nicht unter die klebende Kopfleiste (die Knöpfe der Leiste selbst ausgenommen, sonst rollt die Seite beim Tippen darauf; scroll-padding am html täte das auch bei ihnen) */
 :focus { scroll-margin-top: calc(var(--topbar-h) + 8px); }
 .topbar :focus { scroll-margin-top: 0; }
@@ -1324,14 +1342,6 @@ body.suche-aktiv :is(#variantenDetail, #sprungliste) { display: none !important;
   <div class="kopf-innen">
     <p class="untertitel">Kamera-Modul, Version 2 · 18.10.2026</p>
     <div class="reiter" role="tablist" aria-label="Bereiche" id="reiter"></div>
-  </div>
-</div>
-
-<div class="rueckfrage" id="rfKopf" hidden role="group" aria-label="Rückfrage zum Zurücksetzen">
-  <p>Alle Einstellungen auf Standard zurücksetzen? Das lässt sich mit „Rückgängig“ zurücknehmen.</p>
-  <div class="knopfreihe">
-    <button type="button" class="knopf gefahr-voll" id="rfKopfJa">Ja, zurücksetzen</button>
-    <button type="button" class="knopf" id="rfKopfNein">Nein</button>
   </div>
 </div>
 
@@ -4056,7 +4066,7 @@ body.suche-aktiv :is(#variantenDetail, #sprungliste) { display: none !important;
     const fk = o.fk || (o.akt + ':' + (o.wert == null ? '' : o.wert));
     return `<button type="button" class="ks-knopf ${o.klasse || ''}" data-akt="${o.akt}"${o.wert != null ? ` data-wert="${esc(o.wert)}"` : ''} data-fk="${esc(fk)}"` +
       `${o.label ? ` aria-label="${esc(o.label)}"` : ''}${o.titel ? ` title="${esc(o.titel)}"` : ''}${o.gedrueckt != null ? ` aria-pressed="${!!o.gedrueckt}"` : ''}` +
-      `${o.rolle ? ` role="${o.rolle}"` : ''}${o.checked != null ? ` aria-checked="${!!o.checked}"` : ''}${o.aus ? ' disabled' : ''}${o.grau ? ' aria-disabled="true"' : ''}${o.stil ? ` style="${o.stil}"` : ''}>` +
+      `${o.aufgeklappt != null ? ` aria-expanded="${!!o.aufgeklappt}"` : ''}${o.rolle ? ` role="${o.rolle}"` : ''}${o.checked != null ? ` aria-checked="${!!o.checked}"` : ''}${o.aus ? ' disabled' : ''}${o.grau ? ' aria-disabled="true"' : ''}${o.stil ? ` style="${o.stil}"` : ''}>` +
       `${o.icon ? ic(o.icon) : ''}${o.html || ''}${o.text ? `<span class="ks-knopf-text">${esc(o.text)}</span>` : ''}</button>`;
   }
   const chip = (akt, wert, text, an, extra) => knopf(Object.assign({ akt, wert, text, gedrueckt: !!an, klasse: 'ks-chip' + (an ? ' ks-an' : '') }, extra || {}));
@@ -4400,11 +4410,14 @@ body.suche-aktiv :is(#variantenDetail, #sprungliste) { display: none !important;
     this.ereignis({ typ: 'stufe', stufe: st, variante: s[2] });
     const k = this.root.querySelector(`[data-akt="stufe"][data-wert="${st}"]`); if (k) try { k.focus({ preventScroll: true }); } catch (e) { /* egal */ }
   };
+  // Plan 3.7 / Entscheidung Nr. 12: der Live-Sucher ist erst nach dem iPhone-Test freigegeben – jeder Weg in den Sucher mit Design braucht auch den Schalter „Live-Sucher“ (im Konfigurator nur bei „Alles“ an; die Apps lassen alles an)
+  P.designSucherDa = function () { return this.an('designSucher') && this.an('liveSucher'); };
   P.kNeu = function () { return this.quelle ? knopf({ akt: 'verwerfen-frage', text: 'Anderes Foto', label: 'Anderes Foto (alles verwerfen)', klasse: 'ks-flach' }) : ''; };
   P.kUndo = function () {
     if (!this.an('rueckgaengig') || !this.quelle) return '';
     // „Foto:“ trennt diese Knöpfe von Rückgängig/Wiederholen der Einstellungen in der Kopfleiste der Seite; Kurzbeschriftung nur, wo Platz ist (CSS)
-    return `<div class="ks-undo">${knopf({ akt: 'rueck', icon: 'rueck', label: 'Foto: Rückgängig', titel: 'Foto: Rückgängig (⌘Z)', klasse: 'ks-rund ks-flach', aus: this.pos <= 0, html: '<span class="ks-undo-text" aria-hidden="true">Foto zurück</span>' })}` +
+    // „Foto“ davor: sichtbar nur, wo die Seite es einschaltet (Konfigurator, Plan 3.8: zwei Rückgängig-Paare auf einem Bildschirm)
+    return `<div class="ks-undo"><span class="ks-undo-titel" aria-hidden="true">Foto</span>${knopf({ akt: 'rueck', icon: 'rueck', label: 'Foto: Rückgängig', titel: 'Foto: Rückgängig (⌘Z)', klasse: 'ks-rund ks-flach', aus: this.pos <= 0, html: '<span class="ks-undo-text" aria-hidden="true">Foto zurück</span>' })}` +
       `${knopf({ akt: 'vor', icon: 'vor', label: 'Foto: Wiederholen', titel: 'Foto: Wiederholen (⇧⌘Z)', klasse: 'ks-rund ks-flach', aus: this.pos >= this.verlauf.length - 1, html: '<span class="ks-undo-text" aria-hidden="true">Foto vor</span>' })}</div>`;
   };
   P.kSenden = function () { return this.quelle ? knopf({ akt: 'senden', text: 'Teilen', icon: 'teilen', klasse: 'ks-primaer ks-pille' }) : ''; };
@@ -4423,7 +4436,7 @@ body.suche-aktiv :is(#variantenDetail, #sprungliste) { display: none !important;
     if (this.an('kamera') && ohneKamera()) k.push(`<p class="ks-hilfe ks-kamera-hinweis">Am Rechner öffnet sich hier keine Kamera. Nimm „Foto wählen“${this.o.beispielFoto ? ' oder das Beispielfoto' : ''}.</p>`);
     if (this.an('mediathek')) k.push(knopf({ akt: 'foto-waehlen', text: 'Foto wählen', icon: 'bild', klasse: (k.length ? '' : 'ks-primaer ') + 'ks-breit-knopf' }));
     if (this.an('einfuegen') && navigator.clipboard && navigator.clipboard.read) k.push(knopf({ akt: 'einfuegen', text: 'Einfügen', icon: 'einfuegen', klasse: 'ks-breit-knopf' }));
-    if (this.variante !== 'sucher' && this.an('designSucher')) k.push(knopf({ akt: 'weiter-foto', text: 'Mit Live-Sucher aufnehmen', icon: 'video', klasse: 'ks-breit-knopf' }));
+    if (this.variante !== 'sucher' && this.designSucherDa()) k.push(knopf({ akt: 'weiter-foto', text: 'Mit Live-Sucher aufnehmen', icon: 'video', klasse: 'ks-breit-knopf' }));
     if (this.o.beispielFoto && !bspVorn) k.push(knopf({ akt: 'beispiel', text: 'Beispielfoto', icon: 'bild', klasse: (k.length ? 'ks-flach ' : 'ks-primaer ') + 'ks-breit-knopf' }));
     return k.join('');
   };
@@ -4451,7 +4464,7 @@ body.suche-aktiv :is(#variantenDetail, #sprungliste) { display: none !important;
     if (this.variante === 'schnell' && this.galerieOben()) return leer;   // Knöpfe, Galerie und Zahnrad zeigt die Karte selbst (V.schnell.seite)
     const k = [];
     // Kurzer Text, damit kein Wort bricht; der Knopf-Name für Vorlesen bleibt der lange
-    if (this.an('designSucher') && this.ui.geteilt && this.variante !== 'schnell') k.push(knopf({ akt: 'weiter-foto', text: 'Gleiches Design', label: 'Mit diesem Design weiterfotografieren', icon: 'video', klasse: 'ks-primaer ks-nach-knopf' }));
+    if (this.designSucherDa() && this.ui.geteilt && this.variante !== 'schnell') k.push(knopf({ akt: 'weiter-foto', text: 'Gleiches Design', label: 'Mit diesem Design weiterfotografieren', icon: 'video', klasse: 'ks-primaer ks-nach-knopf' }));
     if (this.an('neuesFoto') && this.ui.geteilt && this.variante !== 'schnell') k.push(knopf({ akt: 'neu-kamera', text: 'Neues Foto', icon: 'kamera', klasse: 'ks-nach-knopf' }));
     const zahnrad = this.zahnradKnopf(), galerie = this.galerieOben() ? '' : this.galerieHtml();   // in der Ein-Tipp-Karte steht die Leiste über den Vorlagen
     if (!k.length && !galerie) return leer;
@@ -4465,7 +4478,7 @@ body.suche-aktiv :is(#variantenDetail, #sprungliste) { display: none !important;
   // Nach dem Teilen steht in der Ein-Tipp-Karte an der Stelle des Links „Teilen-Optionen“ eine einzeilige Reihe: gleiches Design, neues Foto (die Optionen rücken als Knopf neben „Teilen“); die Karte wird dadurch nicht höher, nichts springt
   P.nachSchnellHtml = function () {
     const k = [];
-    if (this.an('designSucher')) k.push(knopf({ akt: 'weiter-foto', text: 'Gleiches Design', label: 'Mit diesem Design weiterfotografieren', icon: 'video', klasse: 'ks-nach-knopf' }));
+    if (this.designSucherDa()) k.push(knopf({ akt: 'weiter-foto', text: 'Gleiches Design', label: 'Mit diesem Design weiterfotografieren', icon: 'video', klasse: 'ks-nach-knopf' }));
     if (this.an('neuesFoto')) k.push(knopf({ akt: 'neu-kamera', text: 'Neues Foto', icon: 'kamera', klasse: 'ks-nach-knopf' }));
     return `<div class="ks-nach-foto ks-nach-schnell"><div class="ks-nach-reihe">${k.join('')}</div></div>`;
   };
@@ -4703,7 +4716,7 @@ body.suche-aktiv :is(#variantenDetail, #sprungliste) { display: none !important;
     else if (a === 'auswahl') this.oeffneBlatt('zugang-auswahl');
     else if (a === 'sucher') {
       this.startAus();
-      if (this.an('designSucher')) this.starteLive(true);
+      if (this.designSucherDa()) this.starteLive(true);
       else if (this.an('liveSucher')) this.starteLive(false);
       else { this.ui.liveFehler = 'Der eigene Sucher ist ausgeschaltet.'; this.zeichneUI(); }
     } else this.startAus();
@@ -5309,13 +5322,16 @@ body.suche-aktiv :is(#variantenDetail, #sprungliste) { display: none !important;
   };
   P.panelText = function () {
     let h = this.hilfe('Tippe auf einen Text im Bild, um ihn zu verschieben. Nochmal tippen: ändern.');
-    const k = [];
-    if (this.an('text')) k.push(knopf({ akt: 'text-neu', text: 'Text hinzufügen', icon: 'text', klasse: 'ks-breit-knopf' }));
+    // Plan 3.10: zwei Reihen kurzer Knöpfe (Text · Sticker · Motiv, dann Einfügen · Mehr); der Vorleser hört die langen Namen, Seltenes steckt hinter „Mehr“
+    const k = [], mehr = [];
+    if (this.an('text')) k.push(knopf({ akt: 'text-neu', text: 'Text', label: 'Text hinzufügen', icon: 'text', klasse: 'ks-breit-knopf' }));
     if (this.an('sticker') || this.an('emojis')) k.push(knopf({ akt: 'sticker-blatt', text: this.an('sticker') ? 'Sticker' : 'Emoji', icon: 'sticker', klasse: 'ks-breit-knopf' }));
-    if (this.an('einfuegen') && navigator.clipboard && navigator.clipboard.read && E().stickerAusBild) k.push(knopf({ akt: 'einfuegen', text: 'Aus Zwischenablage einfügen', icon: 'einfuegen', klasse: 'ks-breit-knopf' }));
-    if (this.motivDa()) k.push(this.motivKnopf());
-    if (this.an('postkarte') && this.variante !== 'postkarte') k.push(knopf({ akt: 'gruss-an', text: this.Z.postkarte.an ? 'Gruß entfernen' : 'Gruß wie auf Postkarte', icon: 'post', klasse: 'ks-breit-knopf' }));
-    h += `<div class="ks-reihe ks-reihe-umbruch">${k.join('')}</div>`;
+    if (this.motivDa()) k.push(knopf({ akt: 'motiv-waehlen', text: 'Motiv', label: 'Motiv aus Fotos wählen', icon: 'bild', klasse: 'ks-breit-knopf' }));
+    if (this.an('einfuegen') && navigator.clipboard && navigator.clipboard.read && E().stickerAusBild) k.push(knopf({ akt: 'einfuegen', text: 'Einfügen', label: 'Aus Zwischenablage einfügen', icon: 'einfuegen', klasse: 'ks-breit-knopf' }));
+    if (this.an('postkarte') && this.variante !== 'postkarte') mehr.push(knopf({ akt: 'gruss-an', text: this.Z.postkarte.an ? 'Gruß entfernen' : 'Gruß wie auf Postkarte', icon: 'post', klasse: 'ks-breit-knopf' }));
+    if (mehr.length) k.push(knopf({ akt: 'text-mehr', text: 'Mehr', label: 'Mehr zum Hinzufügen', icon: 'mehr', aufgeklappt: !!this.ui.textMehr, klasse: 'ks-breit-knopf' }));
+    h += `<div class="ks-text-werkzeuge" role="group" aria-label="Hinzufügen">${k.join('')}</div>`;
+    if (mehr.length && this.ui.textMehr) h += `<div class="ks-reihe ks-reihe-umbruch">${mehr.join('')}</div>`;
     if (this.motivDa()) h += this.motivHinweisHtml();
     else if (this.an('einfuegen')) h += this.hilfe('In Fotos: Motiv lange drücken → Kopieren, dann hier „Einfügen“.');
     const t = (this.Z.texte || []).filter(() => this.an('text'));
@@ -5393,6 +5409,7 @@ body.suche-aktiv :is(#variantenDetail, #sprungliste) { display: none !important;
     if (this.ui.blatt === 'senden') this.zeichneBlatt();
     if (this.brauchtVorbereitung() || (this.variante === 'assistent' && this.schrittId() === 'senden')) this.zeichneUI();
   };
+  // ohneKnoepfe: true = Knöpfe getrennt (Assistent), 'fest' = Dateiname und Knöpfe getrennt (Blatt: unten fest, Plan 3.11)
   P.sendenHtml = function (ohneKnoepfe) {
     const fae = this.faeh(), s = this.ui.senden, fmt = this.ausgabeFormat(), erl = this.erlaubteFormate();
     let h = '';
@@ -5411,7 +5428,8 @@ body.suche-aktiv :is(#variantenDetail, #sprungliste) { display: none !important;
     if (this.an('sichern') || (this.an('teilen') && !kannTeilen)) k.push(knopf({ akt: 'sichern', text: bereit ? 'Sichern' : 'Wird vorbereitet …', icon: 'sichern', klasse: (kannTeilen ? '' : 'ks-primaer ') + 'ks-breit-knopf', aus: !bereit }));
     if (this.an('kopieren') && fae.zwischenablageBild !== false && fmt !== 'pdf' && navigator.clipboard) k.push(knopf({ akt: 'kopieren', text: 'Kopieren', icon: 'kopieren', klasse: 'ks-breit-knopf', aus: !bereit }));
     const knoepfe = k.length ? `<div class="ks-senden-knoepfe">${k.join('')}</div>` : `<p class="ks-hilfe ks-hilfe-fest">${this.an('kopieren') && fmt === 'pdf' ? 'Ein PDF lässt sich nicht kopieren. Nimm JPEG oder PNG, um das Bild zu kopieren.' : 'Für das Bild ist gerade kein Weg zum Weitergeben eingeschaltet.'}</p>`;
-    h += status + (ohneKnoepfe ? '' : knoepfe);
+    if (ohneKnoepfe !== 'fest') h += status + (ohneKnoepfe ? '' : knoepfe);
+    else h += status.replace('class="ks-datei-info"', 'class="ks-datei-info ks-nur-quer"');   // quer steht der Dateiname bei den Optionen, damit der feste Fuß flach bleibt (CSS)
     if (this.an('teilen') && this.hilfen.teilenGesperrt) h += `<p class="ks-hilfe ks-hilfe-fest">Teilen geht in der echten App; hier kannst du sichern.</p>`;
     else if (this.an('teilen') && !kannTeilen) h += `<p class="ks-hilfe ks-hilfe-fest">Direktes Teilen geht hier nicht. „Sichern“ legt die Datei ab.</p>`;
     if (s.erg && s.erg.rueckseite) h += `<p class="ks-hilfe ks-hilfe-fest">Zwei Bilder: Vorder- und Rückseite${kannTeilen && !fae.teilenMehrere ? ' – sie werden nacheinander gesichert.' : '.'}</p>`;
@@ -5421,7 +5439,7 @@ body.suche-aktiv :is(#variantenDetail, #sprungliste) { display: none !important;
       if (alt) h += gruppe('Bildbeschreibung', `<p class="ks-alt">${esc(alt)}</p><div class="ks-reihe">${knopf({ akt: 'alt-kopieren', text: 'Beschreibung kopieren', icon: 'kopieren', klasse: 'ks-flach' })}${this.kiKnopf('alt', 'Beschreibung verbessern')}</div>` + this.hilfe('Für Menschen, die das Bild nicht sehen können – zum Einfügen beim Posten.'));
     }
     if (this.an('vorlagenMerken')) h += `<div class="ks-reihe">${knopf({ akt: 'vorlage-merken', text: 'Als meine Vorlage merken', icon: 'merken', klasse: 'ks-flach' })}</div>`;
-    return ohneKnoepfe ? { inhalt: h, knoepfe } : h;
+    return ohneKnoepfe === 'fest' ? { inhalt: h, fuss: status + knoepfe } : ohneKnoepfe ? { inhalt: h, knoepfe } : h;
   };
   // Was der Ort auf dem Bild verrät (Z.daten.ort: genau = Stadtteil, stadt, aus)
   P.ortSatz = function () {
@@ -5568,13 +5586,13 @@ body.suche-aktiv :is(#variantenDetail, #sprungliste) { display: none !important;
     const b = BLAETTER[name]; if (!b) return;
     const fokus = neu ? null : this.merkeFokus();
     const titel = typeof b.titel === 'function' ? b.titel.call(this) : b.titel;
-    const inhalt = b.inhalt.call(this);
+    const teile = b.teile ? b.teile.call(this) : { inhalt: b.inhalt.call(this) }, inhalt = teile.inhalt;
     const tid = 'ks-bt-' + (this.nr || (this.nr = ++zaehler));
     s.hidden = false;
     s.innerHTML = `<div class="ks-blatt-hinter" data-akt="blatt-zu" aria-hidden="true"></div>` +
       `<div class="ks-blatt ks-blatt-${name}" role="dialog" aria-modal="true" aria-labelledby="${tid}"><div class="ks-blatt-griff" aria-hidden="true"></div>` +
       `<div class="ks-blatt-kopf"><h2 id="${tid}" tabindex="-1">${esc(titel)}</h2>${knopf({ akt: 'blatt-zu', text: b.kopfZu || 'Fertig', klasse: 'ks-flach ks-blatt-zu', fk: 'fertig' })}</div>` +
-      `<div class="ks-blatt-inhalt">${inhalt}</div></div>`;
+      `<div class="ks-blatt-inhalt">${inhalt}</div>${teile.fuss ? `<div class="ks-blatt-fuss">${teile.fuss}</div>` : ''}</div>`;
     requestAnimationFrame(() => s.classList.add('ks-offen'));
     if (neu) {
       const ziel = s.querySelector(b.fokus || '.ks-blatt-inhalt button, .ks-blatt-inhalt textarea, .ks-blatt-inhalt input');
@@ -5592,7 +5610,8 @@ body.suche-aktiv :is(#variantenDetail, #sprungliste) { display: none !important;
   };
 
   const BLAETTER = {
-    senden: { titel: 'Teilen-Optionen', inhalt() { return this.sendenHtml(); } },
+    // Plan 3.11: Optionen oben im Rollbereich, Dateiname und Teilen/Sichern/Kopieren unten fest in der Daumenzone
+    senden: { titel: 'Teilen-Optionen', teile() { return this.sendenHtml('fest'); } },
     text: {
       titel() { return 'Text'; }, fokus: 'textarea',
       inhalt() {
@@ -5923,6 +5942,7 @@ body.suche-aktiv :is(#variantenDetail, #sprungliste) { display: none !important;
       this.Z.sticker = (this.Z.sticker || []).concat([st]);
       this.commit('sticker-neu-' + st.id); this.schliesseBlatt(); this.ui.leistenPanel = null; this.waehle('sticker', st.id); this.haptik(6);
     },
+    'text-mehr'() { this.ui.textMehr = !this.ui.textMehr; this.zeichneUI(); },
     'gruss-an'() { this.Z.postkarte.an = !this.Z.postkarte.an; this.commit('gruss-an'); this.zeichneUI(); },
     /* Kontextstreifen */
     'el-fertig'() { this.waehle(null); },
@@ -6129,7 +6149,7 @@ body.suche-aktiv :is(#variantenDetail, #sprungliste) { display: none !important;
      Ohne Kamera (kein Zugriff, claude.ai, Test) steht das Beispielfoto als „Kamerabild“ da, klar beschriftet. */
   P.starteLive = async function (design) {
     if (this.ui.ansicht === 'live') return;
-    if (design ? !this.an('designSucher') : !this.an('liveSucher')) { this.ui.liveFehler = 'Live-Kamera ist hier nicht verfügbar.'; this.zeichneUI(); return; }
+    if (design ? !this.designSucherDa() : !this.an('liveSucher')) { this.ui.liveFehler = 'Live-Kamera ist hier nicht verfügbar.'; this.zeichneUI(); return; }
     this.startAus();
     this.ui.liveFehler = null; this.ui.beispielModus = false; this.ui.beispielGrund = ''; this.ui.countdown = 0; this.ui.ansicht = 'live';
     Object.assign(this.ui.sucher, { zoom: '1', zoomArt: 'kamera', licht: false, waage: false });
@@ -7569,15 +7589,9 @@ window.ENTSCHEIDUNGEN_STEPHAN = {
     $('btnUndo').addEventListener('click', function () { verlaufSprung(verlaufPos - 1); });
     $('btnRedo').addEventListener('click', function () { verlaufSprung(verlaufPos + 1); });
     $('btnLink').addEventListener('click', linkKopieren);
-    var rf = $('rfKopf');
-    // „Zurücksetzen“ gibt es nur im Blatt „Mehr“: der Fokus geht danach zurück auf „Mehr“
-    function resetFokus() { $('btnMehr').focus(); }
-    function rueckfrageZeigen() { rf.hidden = false; $('rfKopfNein').focus({ preventScroll: true }); }
-    $('btnReset').addEventListener('click', rueckfrageZeigen);
-    $('rfKopfNein').addEventListener('click', function () { rf.hidden = true; resetFokus(); });
-    rf.addEventListener('keydown', function (e) { if (e.key === 'Escape') { rf.hidden = true; resetFokus(); } });   // Escape = „Nein“
-    $('rfKopfJa').addEventListener('click', function () { zuruecksetzen(); rf.hidden = true; resetFokus(); });
-    mehrBauen(rueckfrageZeigen);
+    // Die Rückfrage steht im Blatt „Mehr“ unter der Zeile „Zurücksetzen“ (Plan 3.2); der versteckte Kopfknopf öffnet dorthin
+    $('btnReset').addEventListener('click', function () { mehrOeffnen(); rueckfrageZeigen(); });
+    mehrBauen();
     // Lädt die JSON-Datei mit allen Einstellungen direkt herunter; der Export-Abschnitt bleibt unten
     $('btnExport').addEventListener('click', dateiSichern);
     document.addEventListener('keydown', function (e) {
@@ -7616,13 +7630,40 @@ window.ENTSCHEIDUNGEN_STEPHAN = {
     b.addEventListener('click', bei);
     return b;
   }
-  function mehrBauen(rueckfrageZeigen) {
+  // Rückfrage im Blatt: „Nein“ und Escape schließen nur sie, Fokus zurück auf die Zeile
+  function rueckfrageZeigen() {
+    $('rfKopf').hidden = false; $('mehrReset').setAttribute('aria-expanded', 'true');
+    $('rfKopfNein').focus({ preventScroll: true });
+    // nur die Liste rollen (scrollIntoView würde auch die Seite hinter dem Blatt verschieben)
+    var l = $('mehrListe'), r = $('rfKopf').getBoundingClientRect(), q = l.getBoundingClientRect();
+    if (r.bottom > q.bottom) l.scrollTop += r.bottom - q.bottom + 8;
+  }
+  function rueckfrageWeg(ohneFokus) {
+    $('rfKopf').hidden = true; $('mehrReset').setAttribute('aria-expanded', 'false');
+    if (ohneFokus !== true) $('mehrReset').focus();
+  }
+  function mehrBauen() {
     var d = $('mehrDialog'), liste = $('mehrListe');
     if (!d) return;
     liste.appendChild(mehrZeile('mehrRedo', 'redo', 'Wiederholen', 'Holt eine rückgängig gemachte Änderung zurück.', function () { mehrSchliessen(function () { $('btnMehr').focus(); }); verlaufSprung(verlaufPos + 1); }));
     liste.appendChild(mehrZeile('mehrLink', 'link', 'Link kopieren', 'Ein Link mit allen Einstellungen, zum Weitergeben.', function () { mehrSchliessen(); linkKopieren(); }));
     liste.appendChild(mehrZeile('mehrSichern', 'sichern', 'Datei sichern', 'Alle Einstellungen als Datei sichern (kamera-studio.json).', function () { mehrSchliessen(); dateiSichern(); }));
-    liste.appendChild(mehrZeile('mehrReset', 'reset', 'Zurücksetzen', 'Alles auf den Anfang, mit „Rückgängig“ zurücknehmbar.', function () { mehrSchliessen(rueckfrageZeigen); }));
+    var reset = mehrZeile('mehrReset', 'reset', 'Zurücksetzen', 'Alles auf den Anfang, mit „Rückgängig“ zurücknehmbar.', rueckfrageZeigen);
+    reset.setAttribute('aria-expanded', 'false'); reset.setAttribute('aria-controls', 'rfKopf');
+    liste.appendChild(reset);
+    liste.appendChild(h('div', { class: 'rueckfrage', id: 'rfKopf', hidden: true, role: 'group', 'aria-label': 'Rückfrage zum Zurücksetzen' }, [
+      h('p', { text: 'Alle Einstellungen auf Standard zurücksetzen? Das lässt sich mit „Rückgängig“ zurücknehmen.' }),
+      h('div', { class: 'knopfreihe' }, [
+        h('button', { type: 'button', class: 'knopf gefahr-voll', id: 'rfKopfJa', text: 'Ja, zurücksetzen' }),
+        h('button', { type: 'button', class: 'knopf', id: 'rfKopfNein', text: 'Nein' })
+      ])
+    ]));
+    $('rfKopfNein').addEventListener('click', rueckfrageWeg);
+    $('rfKopfJa').addEventListener('click', function () {
+      zuruecksetzen(); rueckfrageWeg(true);
+      mehrSchliessen(function () { $('btnMehr').focus(); });
+      meldungMitKnopf($('toast'), 'Zurückgesetzt.', 'Rückgängig', function () { verlaufSprung(verlaufPos - 1); $('btnMehr').focus(); });
+    });
     // Erscheinung: dieselben drei Wahlmöglichkeiten wie im Abschnitt „Vorschau“
     var ts = h('div', { class: 'segment' });
     segment(ts, 'Erscheinung', THEMES, 'theme', function () { themeAnwenden(); studioAktualisieren(); });
@@ -7637,8 +7678,11 @@ window.ENTSCHEIDUNGEN_STEPHAN = {
     $('btnMehr').addEventListener('click', mehrOeffnen);
     $('mehrZu').addEventListener('click', function () { mehrSchliessen(); });
     d.addEventListener('click', function (e) { if (e.target === d) mehrSchliessen(); });
+    d.addEventListener('cancel', function (e) { if (!$('rfKopf').hidden) { e.preventDefault(); rueckfrageWeg(); } });   // Escape = „Nein“, das Blatt bleibt offen
+    d.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !$('rfKopf').hidden) { e.preventDefault(); e.stopPropagation(); rueckfrageWeg(); } });
     // Schließen (Fertig, Escape, Tippen daneben): Fokus zurück auf „Mehr“, außer eine Zeile schickt ihn woandershin
     d.addEventListener('close', function () {
+      rueckfrageWeg(true);
       var f = mehrNachFokus; mehrNachFokus = null;
       if (f) f(); else $('btnMehr').focus();
     });
@@ -7777,6 +7821,15 @@ window.ENTSCHEIDUNGEN_STEPHAN = {
     meldung(statusEl, okText || 'Datei „' + name + '“ gesichert ✓');
   }
   var meldeTimer = {};
+  // Hinweis mit einem Knopf (z. B. „Rückgängig“): bleibt 6 s; hat der Knopf dann den Fokus, geht er vorher auf „Mehr“
+  function meldungMitKnopf(el, text, knopfText, bei) {
+    if (!el) return;
+    el.textContent = '';
+    el.appendChild(h('span', { text: text }));
+    el.appendChild(h('button', { type: 'button', class: 'toast-knopf', text: knopfText, onclick: function () { clearTimeout(meldeTimer[el.id]); el.textContent = ''; bei(); } }));
+    clearTimeout(meldeTimer[el.id]);
+    meldeTimer[el.id] = setTimeout(function () { if (el.contains(document.activeElement)) $('btnMehr').focus(); el.textContent = ''; }, 6000);
+  }
   function meldung(el, text) {
     if (!el) return;
     el.textContent = text;
