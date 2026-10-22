@@ -968,6 +968,19 @@ details.sek[open] > summary::after { transform: rotate(-90deg); }
 .sek-inhalt { padding: 2px 16px 16px; min-width: 0; }
 .sek-inhalt > .klein { margin-bottom: 12px; }
 .sek-inhalt > h3 { font-size: 17px; font-weight: 700; margin: 16px 0 8px; }
+/* Plan 3.4: „Mehr Einstellungen“ im Abschnitt (Bauweise wie im Design-Konfigurator P3) */
+.mehr-einst { border-top: 1px solid var(--linie); border-bottom: 1px solid var(--linie); margin-top: 16px; min-width: 0; }   /* ohne Seitenrand: die Felder darin sollen nicht schmaler werden und öfter umbrechen */
+.mehr-einst > summary { min-height: 44px; display: flex; align-items: center; flex-wrap: wrap; gap: 0 8px; cursor: pointer; list-style: none; font-size: 15px; font-weight: 600; border-radius: 10px; }
+.mehr-einst > summary::-webkit-details-marker { display: none; }
+.mehr-einst > summary .me-titel { min-width: 0; }
+.mehr-einst > summary .wert { font-weight: 500; font-size: 15px; color: var(--text-2); white-space: nowrap; }
+.mehr-einst > summary .wert.achtung { color: var(--rot); font-weight: 600; }
+.mehr-einst > summary::after { content: "›"; margin-left: auto; display: inline-grid; place-items: center; width: 22px; height: 22px; font-size: 22px; line-height: 1; color: var(--text-2); transform: rotate(90deg); transition: transform .2s var(--kurve); }
+.mehr-einst[open] > summary::after { transform: rotate(-90deg); }
+.me-inhalt { padding: 0 0 12px; min-width: 0; }
+.me-inhalt > h3 { font-size: 17px; font-weight: 700; margin: 8px 0 8px; }
+.me-inhalt > .klein { margin-bottom: 12px; }
+.me-inhalt > .opt-feld:first-child { margin-top: 4px; }
 .schalter {
   display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%;
   min-height: 52px; padding: 8px 0; border: 0; background: transparent; text-align: left;
@@ -1036,6 +1049,21 @@ details.sek[open] > summary::after { transform: rotate(-90deg); }
   .entsch { grid-template-columns: minmax(0, 1fr) 420px; align-items: start; }
   .entsch-rechts { position: sticky; top: calc(var(--kopf-h, 140px) + 12px); }
 }
+/* Stephan 22.10.: seine 19 Antworten fest oben im Reiter */
+.stephan-kasten { background: var(--karte); border-radius: 16px; padding: 16px; box-shadow: var(--schatten); margin: 12px 0 0; overflow-wrap: anywhere; }
+.stephan-kasten h3 { font-size: 20px; line-height: 1.25; font-weight: 700; margin-bottom: 4px; }
+.stephan-liste { list-style: none; margin: 8px 0 0; padding: 0; }
+.st-zeile { display: flex; flex-direction: column; gap: 2px; padding: 10px 0; border-top: 1px solid var(--linie); min-width: 0; }
+.st-zeile:first-child { border-top: 0; }
+.st-kopf { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 6px; font-size: 13px; color: var(--text-2); font-variant-numeric: tabular-nums; }
+.st-nr { font-weight: 600; color: var(--text); }
+.st-stand { margin-left: auto; }
+.st-stand.stand-gebaut::before { content: "✓ "; color: var(--gruen, #1B7F3A); font-weight: 700; }
+.st-anders { font-weight: 600; color: var(--text); background: var(--karte-2); border-radius: 6px; padding: 0 6px; }
+.st-frage { font-size: 13px; font-weight: 600; color: var(--text-2); }
+.st-antwort { font-size: 16px; line-height: 1.35; }
+.stephan-offen { font-size: 15px; margin-top: 8px; font-weight: 600; }
+.stephan-offen:empty { display: none; }
 .fortschritt-kasten { background: var(--karte); border-radius: 16px; padding: 16px; box-shadow: var(--schatten); display: flex; flex-direction: column; gap: 12px; margin: 12px 0 20px; }
 .fortschritt-text { font-weight: 700; font-size: 17px; font-variant-numeric: tabular-nums; }
 .balken { height: 8px; border-radius: 4px; background: var(--karte-2); overflow: hidden; border: 1px solid var(--linie); }
@@ -1238,6 +1266,8 @@ body.suche-aktiv :is(#variantenDetail, #sprungliste) { display: none !important;
 .opt-erkl, .opt-grund, .opt-status, .opt-warn { margin-top: 8px; }
 .opt-grund:empty, .opt-status:empty, .opt-warn:empty, .opt-erkl:empty { display: none; }
 .opt-warn { color: var(--rot); font-weight: 600; }
+.opt-hinweis { color: var(--text); font-weight: 600; margin: 4px 0 8px; }   /* neutraler Hinweis, warum etwas ausgegraut ist (keine Fehlermeldung) */
+.opt-hinweis:empty { display: none; }
 .opt-status { color: var(--text); font-weight: 600; }
 .sek-inhalt > h3 + .klein { margin-top: -4px; }
 .galerie-info { margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
@@ -1314,7 +1344,6 @@ body.suche-aktiv :is(#variantenDetail, #sprungliste) { display: none !important;
 .stufen-start { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-top: 8px; }
 .stufen-start > .klein { font-weight: 600; }
 /* A25 (Plan 3.13): Stand der Entscheidungen, Umsetzung je Frage, Inhalt des Berichts */
-.stand-text { font-weight: 600; line-height: 1.4; }
 .stand-zeile { font-size: 15px; color: var(--text-2); margin: 4px 0 8px; }
 .stand-zeile.stand-gebaut::before { content: "✓ "; color: var(--gruen, #1B7F3A); font-weight: 700; }
 .bericht-inhalt { margin: 0 0 24px; }
@@ -1386,8 +1415,13 @@ body.suche-aktiv :is(#variantenDetail, #sprungliste) { display: none !important;
     <div class="entsch">
       <div class="entsch-links">
         <h2 class="seitentitel">Deine Entscheidungen</h2>
+        <section class="stephan-kasten" id="stephanKasten" aria-labelledby="stephanTitel" hidden>
+          <h3 id="stephanTitel"></h3>
+          <p class="klein">Fest eingetragen aus der Datei ENTSCHEIDUNGEN-STEPHAN-2026-10-21.md. Was du weiter unten selbst antwortest, ändert diese Liste nicht.</p>
+          <ol class="stephan-liste" id="stephanListe"></ol>
+          <p class="stephan-offen" id="stephanStand"></p>
+        </section>
         <div class="fortschritt-kasten">
-          <p class="stand-text" id="entsStand"></p>
           <div class="fortschritt-text" id="fortschrittText" aria-live="polite"></div>
           <div class="balken" aria-hidden="true"><div id="balkenFuell"></div></div>
           <div class="knopfreihe">
@@ -7057,6 +7091,34 @@ window.ENTSCHEIDUNGEN_STEPHAN = {
     modelle: { w: 'mix', n: 'Gilt für diesen Folgeauftrag, abweichend von der allgemeinen Regel.' },
     wuensche: { w: 'Reicht Stephan später nach', n: '' }
   },
+  // Feste Liste im Reiter „Entscheidungen“ (Stephan 22.10.): Kurztext von Frage und Antwort wie in der Tabelle der Datei; anders = „≠ anders als empfohlen“,
+  // angepasst = in der Datei „≠“, die Frage oben in dieser Datei nennt die Wahl aber inzwischen als Empfehlung (Nr. 5, 18; nicht umentschieden, das macht Stephan)
+  kurz: {
+    standard: ['Standard-Variante', 'Ein-Tipp-Karte, „Bearbeiten“ öffnet die Werkzeugleiste'],
+    mehrere: ['Mehrere Varianten wählbar?', 'Zwei Stufen „Einfach“ und „Profi“, Umschalter im Kamera-Bildschirm'],
+    funktionen: ['Funktionsauswahl', 'Stephans eigene Auswahl aus „Ausprobieren“ (sein Konfigurator-Link)'],
+    formate: ['Dateiformate', 'JPEG, PNG, PDF (kein WebP)'],
+    ort: ['Ort auf dem Foto', 'Stadtteil („Mannheim-Neckarstadt“), Empfehlung war nur Stadt. GPS im Bild wird weiterhin immer entfernt.', 'angepasst'],
+    zeitpunkt: ['Ältere Fotos', 'Nachfragen, ob das Wetter von damals genommen werden soll'],
+    postversand: ['Postkarten per Post', 'Nein, nur teilen und drucken'],
+    handschrift: ['Handschrift Postkarte', 'Apple-Schriften (Noteworthy, Bradley Hand), anderswo Ersatzschrift; keine Zusatzdatei', 'anders'],
+    freistellen: ['Motiv freistellen', 'Über Apple Fotos kopieren und im Studio einfügen'],
+    ki: ['KI-Textvorschläge in der App', 'Später entscheiden, vorerst nur im Konfigurator'],
+    effekte: ['Wetter-Effekte', 'Frei wählbar (Empfehlung war: nur passend zur echten Wetterlage)', 'anders'],
+    sucher: ['Live-Sucher', 'Erst nach iPhone-Test entscheiden'],
+    logo: ['App-Name/Logo auf dem Bild', 'Dezent an, abschaltbar'],
+    entwuerfe: ['Entwürfe speichern', 'Ja, in „Meine Wetterfotos“ mit „Weiter bearbeiten“'],
+    gross: ['Große Bedienung bei großer Schrift', 'Ja, automatisch'],
+    reihenfolge: ['Wie weiter?', 'Wie A15: jetzt Rückweg in den großen Konfigurator (nach A19)'],
+    iphone: ['iPhone-Test', 'Test-Checkliste zum Abhaken (ca. 10 Min.), gleich für A3–A5 mit'],
+    modelle: ['Modelle im Folgeauftrag', 'Opus für Technik, Sonnet für Seiten, Texte, Tests (gilt für diesen Folgeauftrag)', 'angepasst'],
+    wuensche: ['Weitere Wünsche', 'Reicht Stephan später nach']
+  },
+  // Was bei Stephan noch offen ist
+  offen: {
+    sucher: 'Live-Sucher erst nach dem iPhone-Test',
+    reihenfolge: 'die Antwort ist eine Deutung, bitte prüfen'
+  },
   stand: {
     standard: ['gebaut', 'Ein-Tipp-Karte ist Standard; „Bearbeiten“ führt mit „Alle Werkzeuge (Profi)“ in die Werkzeugleiste (A25).'],
     mehrere: ['gebaut', 'Umschalter „Einfach | Profi“ oben im Studio (A25).'],
@@ -7953,7 +8015,8 @@ window.ENTSCHEIDUNGEN_STEPHAN = {
       g.appendChild(b);
     });
     var braucht = f.id === 'galerie' ? 'galerie' : (f.id === 'zugang' ? null : 'sucher');
-    return optFeld('darf-' + f.id, f.name, [h('p', { class: 'klein', text: f.frage + ' Und wenn ja: wo?' }), g, h('p', { class: 'klein opt-erkl', id: 'darf-text-' + f.id })], braucht);
+    var hinweis = braucht === 'sucher' ? h('p', { class: 'klein opt-hinweis', id: 'darf-hinweis-' + f.id, role: 'status' }) : null;   // zweite Meinung 22.10.: ausgegraut nicht ohne Grund
+    return optFeld('darf-' + f.id, f.name, [h('p', { class: 'klein', text: f.frage + ' Und wenn ja: wo?' }), hinweis, g, h('p', { class: 'klein opt-erkl', id: 'darf-text-' + f.id })], braucht);
   }
   function darfKlick(f, id) {
     var l = zustand.optionen.nutzerDarf[f.id].slice();
@@ -7997,7 +8060,9 @@ window.ENTSCHEIDUNGEN_STEPHAN = {
     }
     $('platzSkizze').innerHTML = skizzeHtml(o);
   }
-  function suchOk() { var f = zustand.funktionen; return !!(f.liveSucher || f.designSucher); }
+  // Stephan 22.10.: der Sucher ist nur mit „Live-Sucher“ da (das Studio öffnet ihn seit Nachbesserung 3.7 nur so); „Mit diesem Design weiterfotografieren“ allein reicht nicht
+  function suchOk() { return !!zustand.funktionen.liveSucher; }
+  var SUCHER_AUS_WEG = 'Das gilt nur mit dem Live-Sucher, und der ist aus: Schalte ihn im Abschnitt „Foto und Kamera“ unter „Woher kommt das Foto?“ ein.';
   function mb(n) { return String(Math.round(n * 10) / 10).replace('.', ','); }
   function galerieFolge() {
     var o = zustand.optionen, lo = o.galerieOriginale * 3 + o.galerieBearbeitet * 0.5, hi = o.galerieOriginale * 5 + o.galerieBearbeitet;
@@ -8011,15 +8076,26 @@ window.ENTSCHEIDUNGEN_STEPHAN = {
     Array.prototype.forEach.call(document.querySelectorAll('#panel [data-braucht]'), function (e) {
       var an = ok[e.getAttribute('data-braucht')];
       e.classList.toggle('grau', !an);
-      Array.prototype.forEach.call(e.querySelectorAll('.chip, .schalter'), function (b) { b.setAttribute('aria-disabled', String(!an)); });
+      Array.prototype.forEach.call(e.matches('.chip, .schalter') ? [e] : e.querySelectorAll('.chip, .schalter'), function (b) { b.setAttribute('aria-disabled', String(!an)); });
     });
-    $('sucherHinweis').textContent = ok.sucher ? '' : 'Der eigene Sucher ist aus. Schalte „Live-Sucher“ oder „Mit diesem Design weiterfotografieren“ ein, dann gelten diese Einstellungen.';
+    $('sucherHinweis').textContent = ok.sucher ? '' : 'Timer, Raster und Auslöser-Ort gelten nur im Live-Sucher, und der ist aus: Schalte ihn oben unter „Woher kommt das Foto?“ mit „Live-Sucher“ ein.';
+    $('designSucherHinweis').textContent = ok.sucher ? '' : SUCHER_AUS_WEG;
     $('galerieHinweis').textContent = ok.galerie ? '' : 'Die Galerie ist aus. Schalte „Meine Wetterfotos“ ein, dann gelten diese Mengen.';
+    Array.prototype.forEach.call(document.querySelectorAll('#panel [id^="darf-hinweis-"]'), function (e) { e.textContent = ok.sucher ? '' : SUCHER_AUS_WEG; });
     $('hinweisAktion').textContent = aktionHinweis();
+    // Zweite Meinung 22.10.: die Warnung liegt im zugeklappten Bereich; der Kopf sagt „Achtung“, und beim Auftreten klappt er auf
+    var warnt = !!aktionHinweis(), mw = $('me-wert-zugang');
+    if (mw) {
+      mw.textContent = '· ' + mw.getAttribute('data-n') + (warnt ? ' · Achtung' : '');
+      mw.classList.toggle('achtung', warnt);
+      if (warnt && !warnteVorher && !suchMehrOffen) $('me-zugang').open = true;
+    }
+    warnteVorher = warnt;
   }
+  var warnteVorher = false;
   function aktionHinweis() {
     var o = zustand.optionen, f = zustand.funktionen;
-    if (o.zugangAktion === 'sucher' && !suchOk()) return 'Achtung: Der eigene Sucher ist ausgeschaltet (Abschnitt „Foto und Kamera“). Der Knopf hätte nichts zu öffnen.';
+    if (o.zugangAktion === 'sucher' && !suchOk()) return 'Achtung: Der Live-Sucher ist ausgeschaltet (Abschnitt „Foto und Kamera“). Der Knopf hätte nichts zu öffnen.';
     if (o.zugangAktion === 'kamera' && !f.kamera) return 'Achtung: „Kamera“ ist ausgeschaltet (Abschnitt „Foto und Kamera“). Der Knopf hätte nichts zu öffnen.';
     return '';
   }
@@ -8073,6 +8149,14 @@ window.ENTSCHEIDUNGEN_STEPHAN = {
     return b;
   }
   function schalterListe(keys) { return h('div', { class: 'schalter-liste' }, keys.map(function (k) { return schalterBauen(ITEM[k]); })); }
+  // Plan 3.4 (Stephan 22.10.): je Abschnitt höchstens drei Fragen sichtbar (eine Schalterliste zählt als eine), der Rest aufklappbar wie „Mehr Einstellungen“ im Design-Konfigurator; der Kopf sagt, was drin ist
+  function mehrEinstellungen(id, titel, kinder) {
+    var n = kinder.filter(function (k) { return k.classList.contains('opt-feld'); }).length;
+    return h('details', { class: 'mehr-einst', id: 'me-' + id }, [
+      h('summary', null, [h('span', { class: 'me-titel', text: titel }), h('span', { class: 'wert', id: 'me-wert-' + id, 'data-n': String(n), text: '· ' + n })]),
+      h('div', { class: 'me-inhalt' }, kinder)
+    ]);
+  }
 
   function zugangInhalt() {
     var ort = chipGruppe('ort', 'zugangOrt', ORTE);
@@ -8084,7 +8168,7 @@ window.ENTSCHEIDUNGEN_STEPHAN = {
       optFeld('ort', 'Wo sitzt der Knopf?', [ort, h('p', { class: 'klein opt-erkl', id: 'erklOrt' })]),
       optFeld('platz', 'Welcher Platz?', [platz, h('div', { class: 'skizze', id: 'platzSkizze', 'aria-hidden': 'true' })]),
       optFeld('aussehen', 'Wie sieht er aus?', [aussehen, h('p', { class: 'klein opt-erkl', id: 'erklAussehen' }), h('p', { class: 'klein opt-grund', id: 'grundAussehen' }), h('p', { class: 'klein opt-status', id: 'ogStatus', role: 'status' })]),
-      optFeld('aktion', 'Was passiert beim Antippen?', [chipGruppe('aktion', 'zugangAktion', AKTIONEN), h('p', { class: 'klein opt-erkl', id: 'erklAktion' }), h('p', { class: 'klein opt-warn', id: 'hinweisAktion', role: 'status' })])
+      mehrEinstellungen('zugang', 'Was beim Antippen passiert', [optFeld('aktion', 'Was passiert beim Antippen?', [chipGruppe('aktion', 'zugangAktion', AKTIONEN), h('p', { class: 'klein opt-erkl', id: 'erklAktion' }), h('p', { class: 'klein opt-warn', id: 'hinweisAktion', role: 'status' })])])
     ];
   }
   function fotoInhalt() {
@@ -8095,7 +8179,7 @@ window.ENTSCHEIDUNGEN_STEPHAN = {
       schalterListe(QUELLE_KEYS),
       h('h3', { text: 'Eigener Sucher' }),
       h('p', { class: 'klein', text: 'Auf dem iPhone gehen im Sucher einer Web-App kein Nachtmodus, kein Porträt und kein Live Photo, und die Lautstärketaste löst nicht aus.' }),
-      h('p', { class: 'klein opt-warn', id: 'sucherHinweis', role: 'status' }),
+      h('p', { class: 'klein opt-hinweis', id: 'sucherHinweis', role: 'status' }),
       h('div', { id: 'sucherBlock', 'data-braucht': 'sucher' }, [schalterListe(SUCHER_KEYS)]),
       optFeld('ausloeser', 'Wo sitzt der Auslöser?', [ausl, h('p', { class: 'klein opt-erkl', id: 'erklAusloeser' })], 'sucher')
     ];
@@ -8105,8 +8189,9 @@ window.ENTSCHEIDUNGEN_STEPHAN = {
     var bg = chipGruppe('bearb', 'galerieBearbeitet', MENGEN_B.map(function (n) { return { id: n, name: n ? (n === EMPF_B ? n + ' · empfohlen' : String(n)) : 'Keine' }; }));
     return [
       h('p', { class: 'klein', text: 'Nach dem ersten Foto kann der Nutzer mit dem gemachten Design weiterfotografieren oder ein neues Foto machen. Dazu gibt es eine Galerie. Jeder Weg lässt sich einzeln abschalten.' }),
-      schalterListe(['designSucher', 'neuesFoto', 'galerie']),
-      h('p', { class: 'klein opt-warn', id: 'galerieHinweis', role: 'status' }),
+      (function () { var l = schalterListe(['designSucher', 'neuesFoto', 'galerie']); schalterEls.designSucher.setAttribute('data-braucht', 'sucher'); return l; })(),   // zweite Meinung 22.10.: das Studio öffnet diesen Sucher nur mit „Live-Sucher“
+      h('p', { class: 'klein opt-hinweis', id: 'designSucherHinweis', role: 'status' }),
+      h('p', { class: 'klein opt-hinweis', id: 'galerieHinweis', role: 'status' }),
       optFeld('orig', 'Wie viele Originale soll die Galerie behalten?', [og], 'galerie'),
       optFeld('bearb', 'Wie viele bearbeitete Fotos?', [bg], 'galerie'),
       h('div', { class: 'galerie-info', 'data-braucht': 'galerie' }, [
@@ -8150,9 +8235,8 @@ window.ENTSCHEIDUNGEN_STEPHAN = {
   function komfortInhalt() {
     var g = GRUPPEN.filter(function (x) { return x.id === 'komfort'; })[0];
     return [schalterListe(g.items.map(function (i) { return i[0]; })),
-      h('h3', { text: 'Was der Nutzer selbst ändern darf' }),
-      h('p', { class: 'klein', text: 'Hier legst du fest, was der Nutzer später selbst umstellen darf, und wo er das findet. „Nein“ heißt: Du legst es fest.' })
-    ].concat(DARF_FELDER.map(darfFeld));
+      mehrEinstellungen('komfort', 'Was der Nutzer ändern darf', [h('p', { class: 'klein', text: 'Hier legst du fest, was der Nutzer später selbst umstellen darf, und wo er das findet. „Nein“ heißt: Du legst es fest.' })
+      ].concat(DARF_FELDER.map(darfFeld)))];
   }
 
   function panelBauen() {
@@ -8314,17 +8398,21 @@ window.ENTSCHEIDUNGEN_STEPHAN = {
 
   /* ---------- Suche (Paket H): filtert Schalter und Abschnitte nach Name und Beschreibung ---------- */
   var suchOffen = null;   // Auf/Zu-Zustand der Abschnitte vor der Suche, solange gesucht wird
+  var suchMehrOffen = null;   // dasselbe für „Mehr Einstellungen“
   function suchNorm(t) { return String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ß/g, 'ss'); }
   function sucheAnwenden(roh) {
     var q = suchNorm(roh).trim(), sek = abschnitte.map(function (a) { return a.el; }), zahl = $('kSucheZahl');
+    var mehrs = Array.prototype.slice.call(document.querySelectorAll('#panel .mehr-einst'));
     document.body.classList.toggle('suche-aktiv', !!q);
     Array.prototype.forEach.call(document.querySelectorAll('#panel .such-weg'), function (e) { e.classList.remove('such-weg'); });
     zahl.textContent = '';
     if (!q) {
       if (suchOffen) sek.forEach(function (d, i) { d.open = suchOffen[i]; });
-      suchOffen = null; return null;
+      if (suchMehrOffen) mehrs.forEach(function (m, i) { m.open = suchMehrOffen[i]; });
+      suchOffen = null; suchMehrOffen = null; return null;
     }
     if (!suchOffen) suchOffen = sek.map(function (d) { return d.open; });
+    if (!suchMehrOffen) suchMehrOffen = mehrs.map(function (m) { return m.open; });
     var woerter = q.split(/\s+/);
     function passt(t) { t = suchNorm(t); return woerter.every(function (w) { return t.indexOf(w) >= 0; }); }
     var treffer = 0, erster = null;
@@ -8337,6 +8425,11 @@ window.ENTSCHEIDUNGEN_STEPHAN = {
         });
       } else if (passt(titel + ' ' + Array.prototype.filter.call(inhalt.children, function (c) { return c.tagName !== 'PRE'; }).map(function (c) { return c.textContent; }).join(' '))) { hier = 1; erster = erster || d; }
       if (hier) { d.open = true; treffer += hier; } else d.classList.add('such-weg');
+    });
+    // Treffer unter „Mehr Einstellungen“ klappen es auf; ohne Treffer darin verschwindet es während der Suche
+    mehrs.forEach(function (m) {
+      var da = !!m.querySelector('.schalter:not(.such-weg), .opt-feld:not(.such-weg)');
+      m.open = da; m.classList.toggle('such-weg', !da);
     });
     if (treffer) zahl.textContent = treffer + ' Treffer';
     else {
@@ -8998,8 +9091,8 @@ window.ENTSCHEIDUNGEN_STEPHAN = {
     });
     var n = ents.filter(beantwortet).length;
     // A25 (3.13): „0 von 19“ las sich, als sei nichts entschieden; die Entscheidungen stehen jetzt darüber im Stand
-    $('fortschrittText').textContent = n ? 'Hier eingetragen: ' + n + ' von ' + ents.length + ' beantwortet' : 'Hier ist noch nichts eingetragen.';
-    standSync();
+    // zweite Meinung 22.10.: stehen unten genau Stephans Antworten, sagt die Zeile das statt einer zweiten Zählung
+    $('fortschrittText').textContent = wieStephan() ? 'Hier eingetragen: Stephans Antworten vom ' + stephan().datum + '.' : n ? 'Hier eingetragen: ' + n + ' von ' + ents.length + ' beantwortet' + (n < ents.length ? ', ' + (ents.length - n) + ' offen' : '') : 'Hier ist noch nichts eingetragen.';
     $('balkenFuell').style.width = (ents.length ? Math.round(100 * n / ents.length) : 0) + '%';
     widerspruecheSync(); rovingSync();
     folgeAktualisieren();
@@ -9056,15 +9149,40 @@ window.ENTSCHEIDUNGEN_STEPHAN = {
   function folgeAktualisieren() { var el = $('folgeText'); if (el) el.textContent = folgeText(); }
   /* ---------- A25 (Plan 3.13): Stand deiner Entscheidungen und „Meine Antworten laden“ ---------- */
   function stephan() { var d = window.ENTSCHEIDUNGEN_STEPHAN; return d && d.antworten && d.stand ? d : null; }
-  var STAND_NAMEN = { gebaut: 'gebaut', geplant: 'geplant', ablauf: 'kein Studio-Code nötig', spaeter: 'später' };
-  function standSync() {
-    var d = stephan(), el = $('entsStand'); if (!el) return;
-    if (!d) { el.textContent = ''; return; }
-    var zahl = function (art) { return ents.filter(function (e) { return d.stand[e.id] && d.stand[e.id][0] === art; }).length; };
-    var nr = function (art) { var l = []; ents.forEach(function (e, i) { if (d.stand[e.id] && d.stand[e.id][0] === art) l.push(i + 1); }); return l.length ? ' (Nr. ' + l.join(', ') + ')' : ''; };
+  var STAND_NAMEN = { gebaut: 'gebaut', geplant: 'geplant', ablauf: 'ohne Studio-Code', spaeter: 'später' };
+  function wieStephan() {
+    var d = stephan(); if (!d) return false;
+    var gleich = function (a, b) { return Array.isArray(a) || Array.isArray(b) ? Array.isArray(a) && Array.isArray(b) && a.slice().sort().join() === b.slice().sort().join() : String(a == null ? '' : a).trim() === String(b == null ? '' : b).trim(); };
+    return ents.every(function (e) { var x = d.antworten[e.id], a = antworten[e.id]; return !x || (a && gleich(a.w, x.w)); });
+  }
+  // Eine Stand-Zeile mit einer Zählung (je Antwort genau ein Stand); „Noch zu klären“ nennt nur, was dort nicht schon steht
+  function standText(d) {
+    var nrn = function (art) { var l = []; ents.forEach(function (e, i) { if (d.stand[e.id] && d.stand[e.id][0] === art) l.push(i + 1); }); return l; };
     var b = ents.filter(function (e) { var a = d.antworten[e.id]; return a && (Array.isArray(a.w) ? a.w.length : String(a.w || '').trim()); }).length;
-    el.textContent = 'Stand ' + d.standDatum + ': ' + b + ' beantwortet, davon gebaut: ' + zahl('gebaut') + ', geplant: ' + zahl('geplant') + nr('geplant') +
-      ' · kein Studio-Code nötig: ' + zahl('ablauf') + nr('ablauf') + ' · später: ' + zahl('spaeter') + nr('spaeter') + '.';
+    var teile = [];
+    ['gebaut', 'geplant', 'ablauf', 'spaeter'].forEach(function (art) {
+      var l = nrn(art); if (!l.length) return;
+      teile.push(l.length + ' ' + STAND_NAMEN[art] + (art === 'geplant' || art === 'spaeter' ? ' (Nr. ' + l.join(', ') + ')' : ''));
+    });
+    var klaeren = []; ents.forEach(function (e, i) { if (d.offen && d.offen[e.id] && !(d.stand[e.id] && d.stand[e.id][0] === 'spaeter')) klaeren.push('Nr. ' + (i + 1) + ' (' + d.offen[e.id] + ')'); });
+    return 'Stand ' + d.standDatum + ', alle ' + b + ' beantwortet: ' + teile.join(', ') + '.' + (klaeren.length ? ' Noch zu klären: ' + klaeren.join(', ') + '.' : '');
+  }
+  // Stephan 22.10.: seine 19 Antworten stehen fest oben im Reiter, je Zeile Nummer, Kurztext und Stand (das Datum steht im Titel)
+  var MARKE = { anders: 'anders als empfohlen', angepasst: 'Empfehlung später angepasst' };   // angepasst: Nr. 5 und 18 – die Frage unten nennt inzwischen Stephans Wahl als Empfehlung
+  function stephanListeBauen() {
+    var d = stephan(), l = $('stephanListe'); if (!d || !d.kurz || !l) return;
+    $('stephanTitel').textContent = 'Stephans Antworten vom ' + d.datum;
+    ents.forEach(function (e, i) {
+      var k = d.kurz[e.id], st = d.stand[e.id]; if (!k) return;
+      l.appendChild(h('li', { class: 'st-zeile' }, [
+        h('span', { class: 'st-kopf' }, [h('span', { class: 'st-nr', text: 'Nr. ' + (i + 1) }),
+          k[2] ? h('span', { class: 'st-anders', text: MARKE[k[2]] }) : null, st ? h('span', { class: 'st-stand stand-' + st[0], text: STAND_NAMEN[st[0]] }) : null]),
+        h('span', { class: 'st-frage', text: k[0] }),
+        h('span', { class: 'st-antwort', text: k[1] })
+      ]));
+    });
+    $('stephanStand').textContent = standText(d);
+    $('stephanKasten').hidden = false;
   }
   // Überschreibt nie still: stehen schon Antworten da, fragt die Seite vorher (Prüffund F13)
   function meineFragen() {
@@ -9081,7 +9199,7 @@ window.ENTSCHEIDUNGEN_STEPHAN = {
     meldung($('meineStatus'), 'Stephans Antworten vom ' + d.datum + ' sind eingetragen. Der Link enthält sie jetzt auch.');
   }
   function entsBauen() {
-    entsLaden(); fragenBauen(); entsSync();
+    entsLaden(); fragenBauen(); stephanListeBauen(); entsSync();
     if (stephan()) $('meineLaden').addEventListener('click', meineFragen); else $('meineLaden').hidden = true;
     $('meineNein').addEventListener('click', function () { $('meineRueckfrage').hidden = true; $('meineLaden').focus(); });
     $('meineJa').addEventListener('click', function () { $('meineRueckfrage').hidden = true; meineLaden(); $('meineLaden').focus(); });
