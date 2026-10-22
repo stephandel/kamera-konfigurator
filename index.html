@@ -102,7 +102,7 @@
 .ks button:disabled { cursor: default; }
 .ks :focus-visible { outline: 3px solid var(--ks-akzent); outline-offset: 2px; }
 .ks .ks-ic { width: calc(22px * var(--ks-tk)); height: calc(22px * var(--ks-tk)); flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.ks .ks-datei, .ks .ks-datei-kamera { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; left: -9999px; }
+.ks .ks-datei, .ks .ks-datei-kamera, .ks .ks-datei-motiv { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; left: -9999px; }
 
 /* ---------- Grundgerüst ---------- */
 .ks .ks-app { position: absolute; inset: 0; display: flex; flex-direction: column; background: var(--ks-bg); }
@@ -204,6 +204,7 @@
   background: transparent; font-size: var(--ks-fs-cap); font-weight: 500; color: var(--ks-text2); border-radius: 12px;
 }
 .ks .ks-knopf.ks-werkzeug.ks-an, .ks .ks-knopf.ks-werkzeug[aria-pressed="true"] { color: var(--ks-akzent); background: var(--ks-fuellung-an); }
+.ks .ks-knopf.ks-werkzeug.ks-an .ks-knopf-text, .ks .ks-knopf.ks-werkzeug[aria-pressed="true"] .ks-knopf-text { color: var(--ks-text); }   /* Beschriftung 11 px: Akzent auf Akzent-Fläche reichte nur für 3,8:1 */
 
 /* Chips und Segmente */
 .ks .ks-chips { display: flex; gap: 8px; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; padding: 2px; margin: -2px; scroll-snap-type: x proximity; }
@@ -750,6 +751,16 @@
 @media (hover: hover) and (pointer: fine) { .ks .ks-st-ikon:hover, .ks .ks-st-tab:hover, .ks .ks-st-zeile:hover { filter: brightness(1.08); } }
 @media (prefers-reduced-transparency: reduce) { .ks .ks-st-schwebend .ks-za-symbol, .ks .ks-st-schwebend .ks-za-symbolText { background: var(--ks-bg2); -webkit-backdrop-filter: none; backdrop-filter: none; } }
 
+/* Querformat: Platz für 12 px Beschriftung der Werkzeuge */
+.ks.ks-klein.ks-quer .ks-werkzeugleiste .ks-werkzeug .ks-knopf-text { font-size: 0.75rem; letter-spacing: 0; }
+
+/* Große Schrift im Hochformat: alle sechs Werkzeuge bleiben, die Leiste rollt seitlich (statt Anpassen und Format zu verstecken) */
+.ks.ks-gross.ks-hoch .ks-werkzeugleiste { overflow-x: auto; justify-content: flex-start; scrollbar-width: none; }
+.ks.ks-gross.ks-hoch .ks-werkzeugleiste::-webkit-scrollbar { display: none; }
+.ks.ks-gross.ks-hoch .ks-werkzeugleiste .ks-knopf.ks-werkzeug { flex: 0 0 22%; min-width: 0; }   /* 4,5 Werkzeuge im Bild: das angeschnittene fünfte zeigt, dass die Leiste rollt */
+/* Niedriges Querformat (iPhone SE quer): Vorlagenbilder kleiner, damit eine Reihe ganz in den Rollbereich passt */
+@container ks (max-height: 340px) { .ks.ks-quer .ks-vorlage img { height: 52px; } }   /* misst das Studio, nicht das Fenster (eingebettete Studios) */
+
 /* Kamera-Studio: Seiten-Hülle (Paket S). Apple-Stil, hell und dunkel. */
 :root {
   --akzent: #086ADC; --auf-akzent: #fff; --akzent-flaeche: rgba(8,106,220,.12);
@@ -916,6 +927,7 @@ h1, h2, h3, h4, p { margin: 0; }
 }
 .chip[aria-checked="true"], .chip[aria-pressed="true"] { background: #086ADC; border-color: #086ADC; color: #fff; font-weight: 700; }   /* Kontrast 5,1:1 hell und dunkel */
 
+.einleitung { margin: 0; padding: 0 4px; font-size: 15px; line-height: 1.4; color: var(--text-2); max-width: 68ch; }
 .zaehler { font-size: 15px; font-weight: 600; margin: 0; padding: 0 4px; color: var(--text-2); font-variant-numeric: tabular-nums; }
 #inhalt, #buehne, #studioMount, #panel, .buehne-spalte { scroll-margin-top: calc(var(--topbar-h) + 8px); }
 /* Tab-Taste (auch rückwärts): Fokus holt Elemente nicht unter die klebende Kopfleiste (die Knöpfe der Leiste selbst ausgenommen, sonst rollt die Seite beim Tippen darauf; scroll-padding am html täte das auch bei ihnen) */
@@ -1020,7 +1032,9 @@ details.sek[open] > summary::after { transform: rotate(-90deg); }
 .kachel { text-align: left; min-height: 64px; padding: 12px 16px; border-radius: 12px; border: 2px solid var(--linie); background: var(--karte-2); position: relative; display: block; }
 .kachel .k-text { display: block; font-size: 17px; font-weight: 600; padding-right: 28px; }
 .kachel .k-hinweis { display: block; font-size: 13px; color: var(--text-2); margin-top: 2px; }
-.kachel .k-emp { display: inline-block; margin-top: 6px; font-size: 12px; font-weight: 700; color: var(--akzent); background: var(--akzent-flaeche); padding: 2px 8px; border-radius: 999px; }
+.kachel .k-emp { display: inline-block; margin-top: 6px; font-size: 12px; font-weight: 700; color: #0753B0; background: var(--akzent-flaeche); padding: 2px 8px; border-radius: 999px; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .kachel .k-emp { color: #8EC3FF; } }
+:root[data-theme="dark"] .kachel .k-emp { color: #8EC3FF; }
 .kachel .k-haken { position: absolute; top: 12px; right: 12px; width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--linie); display: grid; place-items: center; font-size: 13px; font-weight: 800; color: transparent; }
 .kachel[aria-checked="true"] { border-color: var(--akzent); background: var(--akzent-flaeche); }
 .kachel[aria-checked="true"] .k-haken { background: var(--akzent); border-color: var(--akzent); color: var(--auf-akzent); }
@@ -1325,6 +1339,7 @@ body.suche-aktiv :is(#variantenDetail, #sprungliste) { display: none !important;
   <section id="tab-ausprobieren" role="tabpanel" aria-label="Ausprobieren" hidden>
     <div class="probe">
       <div class="panel" id="panel">
+        <p class="einleitung" id="einleitung">Stell ein, was die Kamera in deiner App können soll. Die Vorschau zeigt es sofort.</p>
         <div class="such-kopf">
           <div class="k-suche" role="search">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
@@ -3989,7 +4004,7 @@ body.suche-aktiv :is(#variantenDetail, #sprungliste) { display: none !important;
   // Tabs der WetterPro-App (ohne den Kamera-Platz): Kennung, Name, Symbol
   const START_TABS = [['wetter', 'Wetter', 'wetter'], ['graphs', 'Graphs', 'graph'], ['radsat', 'Rad/Sat', 'radar'], ['mehr', 'Mehr', 'mehr']];
   const LANG_MS = 500;
-  const GAL_HINWEIS = 'Nur auf diesem iPhone gespeichert. Mit Teilen oder Sichern behalten.';
+  const GAL_HINWEIS = 'Nur auf diesem Gerät gespeichert. Mit Teilen oder Sichern behalten.';
   // Filter-Anmutung im Sucher: CSS-Näherung der Engine-Filter (das fertige Foto rechnet die Engine genau)
   const FILTER_CSS = { natur: 'saturate(1.12) contrast(1.04)', warm: 'sepia(.25) saturate(1.15)', kuehl: 'hue-rotate(10deg) saturate(.95) brightness(1.02)', analog: 'sepia(.25) contrast(.95) saturate(.9)',
     klar: 'contrast(1.12) saturate(1.1)', drama: 'contrast(1.3) saturate(.9) brightness(.92)', sw: 'grayscale(1)', 'sw-kontrast': 'grayscale(1) contrast(1.35)', sepia: 'sepia(.9)', abend: 'sepia(.35) saturate(1.3) hue-rotate(-10deg)' };
@@ -4322,6 +4337,8 @@ body.suche-aktiv :is(#variantenDetail, #sprungliste) { display: none !important;
     this.$.seite.innerHTML = (seite || '').trim();
     if (nach.rolle) { const inh = this.$.seite.querySelector('.ks-seite-inhalt'); if (inh) inh.insertAdjacentHTML('beforeend', nach.rolle); }
     Array.from(this.$.seite.querySelectorAll(SCROLL)).forEach((e, i) => { if (scroll[i]) { e.scrollLeft = scroll[i][0]; e.scrollTop = scroll[i][1]; } });
+    { const wl = this.$.seite.querySelector('.ks-werkzeugleiste'), wa = wl && wl.querySelector('.ks-an');   // rollende Werkzeugleiste (große Schrift): das gewählte Werkzeug bleibt im Bild
+      if (wl && wa && wl.scrollWidth > wl.clientWidth) { const q = wa.getBoundingClientRect(), p = wl.getBoundingClientRect(); if (q.width && (q.left < p.left || q.right > p.right)) wl.scrollLeft += (q.left + q.width / 2) - (p.left + p.width / 2); } }
     if (this.vorlageZeigen) { this.vorlageZeigen = false; const k = this.$.seite.querySelector('.ks-vorlage.ks-an'), c = k && k.parentElement; if (k && c && c.scrollWidth > c.clientWidth) { const z = k.offsetLeft - (c.clientWidth - k.offsetWidth) / 2; c.scrollTo({ left: Math.max(0, z), behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); } }
     this.$.leer.innerHTML = this.quelle || live ? '' : this.leerHtml();
     this.$.zusatz.innerHTML = (!zs && v.zusatz ? (v.zusatz.call(this) || '') : '') + (!zs && !live ? this.frageHtml() : '');
@@ -4678,7 +4695,11 @@ body.suche-aktiv :is(#variantenDetail, #sprungliste) { display: none !important;
   P.zugangTippen = function () {
     if (this.langGerade) { this.langGerade = false; return; }   // ein langer Druck hat schon das Menü geöffnet
     const a = this.zugang().aktion;
-    if (a === 'kamera') { if (this.an('kamera')) this.$.dateiKamera.click(); else this.zeigeHinweis('Die Kamera ist hier ausgeschaltet.'); }
+    if (a === 'kamera') {
+      if (!this.an('kamera')) this.zeigeHinweis('Die Kamera ist hier ausgeschaltet.');
+      else if (this.o.beispielHaupt && this.o.beispielFoto && !this.quelle) this.startAus();   // Konfigurator: statt Dateidialog das leere Studio mit dem Knopf „Beispielfoto“ zeigen
+      else this.$.dateiKamera.click();
+    }
     else if (a === 'auswahl') this.oeffneBlatt('zugang-auswahl');
     else if (a === 'sucher') {
       this.startAus();
@@ -4749,9 +4770,27 @@ body.suche-aktiv :is(#variantenDetail, #sprungliste) { display: none !important;
     else if (v.nachLaden && !(o.design && this.variante === 'schnell')) v.nachLaden.call(this);
     this.verlaufStart();
     this.ereignis({ typ: 'foto-geladen', breite: q.breite, hoehe: q.hoehe, name: q.name, entwurf: !!o.entwurf });
-    this.zeichneUI(); this.nachAenderung();
+    this.zeichneUI(); this.nachAenderung(); this.fokusNachLaden();
     if (!o.entwurf) this.wetterZurAufnahme();
     if (!o.ausGalerie) this.galerieOriginalSichern(q);
+  };
+  /* Nach dem Laden zeichnet das Studio neu; war der Fokus verloren (BODY), geht er an das offene Blatt, sonst an die gewählte oder erste sichtbare Vorlage bzw. das erste sichtbare Werkzeug */
+  P.fokusNachLaden = function () {
+    const a = document.activeElement;
+    if (a && a.isConnected && a !== document.body && a !== document.documentElement) return;   // der Fokus liegt noch irgendwo sinnvoll
+    const k = this.root.getBoundingClientRect();
+    const imBild = e => {   // ganz im Studio und in jedem rollenden Vorfahren zu sehen
+      const q = e.getBoundingClientRect(); if (!(q.width > 0) || q.left < k.left - 1 || q.right > k.right + 1 || q.top < k.top - 1 || q.bottom > k.bottom + 1) return false;
+      for (let x = e.parentElement; x && x !== this.root; x = x.parentElement) {
+        const c = getComputedStyle(x);
+        if (/auto|scroll|hidden/.test(c.overflowX + c.overflowY)) { const p = x.getBoundingClientRect(); if (q.left < p.left - 1 || q.right > p.right + 1 || q.top < p.top - 1 || q.bottom > p.bottom + 1) return false; }
+      }
+      return true;
+    };
+    const blatt = this.ui.blatt && this.root.querySelector('.ks-blatt h2');
+    const z = blatt || ['[data-akt="vorlage"][aria-pressed="true"]', '[data-akt="vorlage"]', '[data-akt="werkzeug"]', '[data-akt="schnell-teilen"]:not([disabled])', 'button:not([disabled])']
+      .map(sel => Array.from(this.root.querySelectorAll(sel)).find(imBild)).find(Boolean);
+    if (z) try { z.focus({ preventScroll: true }); } catch (e) { /* egal */ }
   };
   P.entwurfAnwenden = function (e) {
     this.Z = E().neuerZustand ? E().neuerZustand(e.zustand) : tief(e.zustand);   // älterer Stand: fehlende Schlüssel kommen aus dem Standard
@@ -5214,7 +5253,7 @@ body.suche-aktiv :is(#variantenDetail, #sprungliste) { display: none !important;
     let h = this.hilfe('Regler nach rechts: mehr. Doppeltippen setzt zurück.');
     if (this.an('autoVerbessern')) h += `<div class="ks-reihe">${knopf({ akt: 'auto', text: 'Automatisch verbessern', icon: 'zauber', klasse: 'ks-breit-knopf' })}</div>`;
     if (this.an('anpassen')) {
-      const ps = this.gross() ? ANPASSUNG.slice(0, 3) : ANPASSUNG;
+      const ps = ANPASSUNG;   // die Chip-Reihe rollt; bei großer Schrift darf kein Regler verschwinden
       if (!ps.find(p => p[0] === this.ui.param)) this.ui.param = ps[0][0];
       h += `<div class="ks-chips" role="group" aria-label="Was anpassen?">${ps.map(([id, n]) => chip('param', id, n + (this.Z.anpassung[id] ? ' •' : ''), this.ui.param === id)).join('')}</div>`;
       const p = ps.find(x => x[0] === this.ui.param);
@@ -5724,7 +5763,7 @@ body.suche-aktiv :is(#variantenDetail, #sprungliste) { display: none !important;
       h += gruppe('Meine Wetterfotos', seg('nutzer-galerie', [['1', 'An'], ['0', 'Aus']], an ? '1' : '0', 'Meine Wetterfotos') +
         (an ? '<h3 class="ks-gruppe-titel">Originale behalten</h3>' + seg('nutzer-galerie-orig', MENGEN_ORIG.map(n => [n, n === 0 ? 'Keine' : n]), this.opt('galerieOriginale'), 'Anzahl Originale') +
           '<h3 class="ks-gruppe-titel">Fertige Fotos behalten</h3>' + seg('nutzer-galerie-bearb', MENGEN_BEARB.map(n => [n, n === 0 ? 'Keine' : n]), this.opt('galerieBearbeitet'), 'Anzahl fertige Fotos') : '') +
-        this.hilfe('Mehr Fotos brauchen mehr Speicher auf diesem iPhone. Safari räumt nach 7 Tagen ohne Nutzung auf, die App auf dem Home-Bildschirm nicht.'));
+        this.hilfe('Mehr Fotos brauchen mehr Speicher auf diesem Gerät. Safari räumt nach 7 Tagen ohne Nutzung auf, die App auf dem Home-Bildschirm nicht.'));
     }
     if (g.sucher) h += gruppe('Knöpfe im Sucher', SUCHER_SCHALTER.filter(s => this.F[s[0]] !== false).map(s => schalter('nutzer-schalter', s[0], s[1], this.an(s[0]))).join(''));
     return h;
@@ -6630,12 +6669,11 @@ body.suche-aktiv :is(#variantenDetail, #sprungliste) { display: none !important;
     werkzeuge() {
       const F = n => this.an(n), w = [];
       if (F('zuschneiden') || F('drehen') || F('spiegeln') || F('gerade')) w.push(['ausschnitt', 'Zuschnitt', 'zuschneiden']);
-      if ((F('anpassen') || F('autoVerbessern')) && !this.gross()) w.push(['anpassen', 'Anpassen', 'regler']);
+      if (F('anpassen') || F('autoVerbessern')) w.push(['anpassen', 'Anpassen', 'regler']);
       if (F('filter') || F('sw') || F('effekte') || F('wetterEffekte')) w.push(['filter', 'Filter', 'filter']);
       if (F('daten')) w.push(['wetter', 'Wetter', 'wetter']);
       if (F('text') || F('sticker') || F('emojis')) w.push(['text', 'Text', 'text']);
-      if ((F('formate') || F('rahmen')) && !this.gross()) w.push(['format', 'Format', 'format']);
-      if (this.gross() && !w.find(x => x[0] === 'ausschnitt') && F('formate')) w.unshift(['format', 'Format', 'format']);
+      if (F('formate') || F('rahmen')) w.push(['format', 'Format', 'format']);
       return w;
     },
     kopf() { return this.kopfHtml(this.kNeu(), this.kUndo(), this.kSenden()); },
